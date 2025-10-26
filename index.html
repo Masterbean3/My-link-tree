@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Link Tree Personal - Tracking y Diseño</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos base: Se actualizarán con JavaScript según el tema */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        /* Clases base para los botones, se les aplica el color en JS/Tailwind */
+        .link-button {
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+        }
+        .link-button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+        /* Estilo para el panel de controles del dueño */
+        #owner-controls {
+            background-color: var(--bg-card); /* Usamos variables CSS para el tema */
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-start justify-center p-4">
+
+    <!-- Contenedor Principal Centrado y Responsivo -->
+    <main class="w-full max-w-md mx-auto mt-8 sm:mt-12">
+
+        <!-- Sección de Perfil -->
+        <header class="text-center mb-10">
+            <img src="https://placehold.co/150x150/34d399/ffffff?text=TU+FOTO"
+                 alt="Foto de Perfil"
+                 class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-emerald-400 shadow-xl"
+                 onerror="this.onerror=null;this.src='https://placehold.co/150x150/34d399/ffffff?text=FOTO';"
+            >
+            <h1 class="text-3xl font-extrabold mt-4 text-white" id="profile-name">@TuNombreDeUsuario</h1>
+            <p class="text-lg text-gray-400 mt-1 font-medium" id="profile-bio">
+                | Creador de Contenido 🚀 | Tracking Activo | ¡Sígueme!
+            </p>
+        </header>
+
+        <!-- Lista de Enlaces -->
+        <div id="links-container" class="space-y-4">
+
+            <!-- Link 1: Instagram. Recuerda actualizar la URL y data-link-id -->
+            <a href="https://www.instagram.com/tuusuario/" target="_blank"
+               class="link-button link-to-track flex items-center justify-center p-4 w-full text-white rounded-xl"
+               data-link-id="instagram_perfil" data-base-color="bg-emerald-600">
+                <span class="mr-2 text-xl">📸</span>
+                Instagram (Fotos y Reels)
+            </a>
+
+            <!-- Link 2: TikTok o X (Twitter) -->
+            <a href="https://www.tiktok.com/@tuusuario" target="_blank"
+               class="link-button link-to-track flex items-center justify-center p-4 w-full text-white rounded-xl"
+               data-link-id="tiktok_perfil" data-base-color="bg-gray-700">
+                <span class="mr-2 text-xl">🐦</span>
+                X (Twitter) o TikTok
+            </a>
+
+            <!-- Link 3: YouTube o Podcast -->
+            <a href="https://www.youtube.com/@tuusuario" target="_blank"
+               class="link-button link-to-track flex items-center justify-center p-4 w-full text-white rounded-xl"
+               data-link-id="youtube_canal" data-base-color="bg-red-600">
+                <span class="mr-2 text-xl">▶️</span>
+                YouTube (Último Video)
+            </a>
+
+            <!-- Link 4: Sitio Web Personal / Blog / Tienda -->
+            <a href="https://www.tuweb.com" target="_blank"
+               class="link-button link-to-track flex items-center justify-center p-4 w-full text-white rounded-xl"
+               data-link-id="sitio_web" data-base-color="bg-indigo-600">
+                <span class="mr-2 text-xl">🌐</span>
+                Mi Sitio Web / Blog
+            </a>
+
+        </div>
+
+        <!-- Controles y Panel del Dueño (Inicialmente oculto para todos) -->
+        <section id="owner-controls" class="hidden">
+            <h2 class="text-2xl font-bold mb-4 text-emerald-400">👑 Controles de Dueño</h2>
+
+            <!-- 1. Selector de Tema -->
+            <div id="design-panel" class="mb-6 p-4 rounded-lg border border-gray-600">
+                <h3 class="text-lg font-semibold mb-2">🎨 Diseño del Link Tree</h3>
+                <div class="flex space-x-4">
+                    <button id="theme-dark-btn" class="flex-1 p-3 rounded-lg bg-gray-800 text-white border border-gray-600 hover:bg-gray-700 transition">
+                        Modo Oscuro
+                    </button>
+                    <button id="theme-light-btn" class="flex-1 p-3 rounded-lg bg-white text-gray-800 border border-gray-300 hover:bg-gray-100 transition">
+                        Modo Claro
+                    </button>
+                </div>
+                <p class="text-xs text-gray-400 mt-2" id="current-theme-status">Tema actual: Oscuro</p>
+            </div>
+
+            <!-- 2. Dashboard de Analíticas -->
+            <div id="analytics-panel">
+                <h3 class="text-xl font-bold mb-3 text-emerald-400">📊 Panel de Analíticas (Tiempo Real)</h3>
+                <div id="analytics-data" class="grid grid-cols-2 gap-4 text-center">
+                    <div class="p-3 bg-gray-700 rounded-lg">
+                        <p class="text-3xl font-extrabold text-white" id="total-views">0</p>
+                        <p class="text-sm text-gray-400">Total de Vistas</p>
+                    </div>
+                    <div class="p-3 bg-gray-700 rounded-lg">
+                        <p class="text-3xl font-extrabold text-white" id="total-clicks">0</p>
+                        <p class="text-sm text-gray-400">Total de Clicks</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pie de página (Opcional) -->
+        <footer class="text-center mt-8">
+            <p class="text-sm text-gray-500" id="footer-text">
+                Hecho con ✨ por Tu Nombre.
+            </p>
+        </footer>
+
+    </main>
+
+    <!-- Lógica de Firebase, Tracking y Diseño -->
+    <script type="module">
+        // Importaciones de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, setDoc, doc, getDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Variables Globales (Disponibles en el entorno de Canvas)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+
+        let app, db, auth;
+        let userId = null;
+        let isOwner = false; // Bandera para controlar la visibilidad de los controles
+        const ANALYTICS_COLLECTION = "link_tree_analytics";
+        const DESIGN_DOC_PATH = 'public/settings/design'; // Ruta pública para la configuración de diseño
+
+        // Definiciones de Temas
+        const themes = {
+            dark: {
+                bodyBg: 'bg-gray-900',
+                bodyText: 'text-white',
+                headerText: 'text-white',
+                bioText: 'text-gray-400',
+                footerText: 'text-gray-500',
+                ownerBg: '#1f2937',
+                ownerBorder: '#374151',
+                buttonHoverShadow: 'rgba(52, 211, 163, 0.4)',
+                buttonBaseClass: 'border-2 border-transparent hover:border-emerald-400'
+            },
+            light: {
+                bodyBg: 'bg-gray-100',
+                bodyText: 'text-gray-900',
+                headerText: 'text-gray-900',
+                bioText: 'text-gray-600',
+                footerText: 'text-gray-500',
+                ownerBg: '#ffffff',
+                ownerBorder: '#d1d5db',
+                buttonHoverShadow: 'rgba(52, 211, 163, 0.8)',
+                buttonBaseClass: 'border-2 border-transparent hover:border-emerald-600'
+            }
+        };
+
+        // --------------------------------------------------------
+        // 1. GESTIÓN DE DISEÑO Y TEMAS
+        // --------------------------------------------------------
+
+        /**
+         * Aplica los estilos del tema seleccionado a la página.
+         * @param {string} themeName - 'dark' o 'light'.
+         */
+        function applyTheme(themeName) {
+            const theme = themes[themeName] || themes.dark; // Fallback al oscuro
+            const body = document.body;
+
+            // Limpiar clases de fondo y texto
+            Object.values(themes).forEach(t => {
+                body.classList.remove(t.bodyBg, t.bodyText);
+            });
+
+            // Aplicar clases de tema
+            body.classList.add(theme.bodyBg, theme.bodyText);
+            document.getElementById('profile-name').classList.remove('text-white', 'text-gray-900');
+            document.getElementById('profile-name').classList.add(theme.headerText);
+            document.getElementById('profile-bio').classList.remove('text-gray-400', 'text-gray-600');
+            document.getElementById('profile-bio').classList.add(theme.bioText);
+            document.getElementById('footer-text').classList.remove('text-gray-500');
+            document.getElementById('footer-text').classList.add(theme.footerText);
+
+            // Actualizar el panel de control del dueño (si está visible)
+            const ownerControls = document.getElementById('owner-controls');
+            ownerControls.style.setProperty('--bg-card', theme.ownerBg);
+            ownerControls.style.setProperty('--border-color', theme.ownerBorder);
+
+            // Actualizar los botones de enlace
+            document.querySelectorAll('.link-to-track').forEach(link => {
+                // Limpiar clases de borde antiguas
+                Object.values(themes).forEach(t => {
+                    t.buttonBaseClass.split(' ').forEach(cls => link.classList.remove(cls));
+                });
+
+                // Aplicar nuevas clases de borde y sombra hover
+                link.classList.add(...theme.buttonBaseClass.split(' '));
+                link.style.boxShadow = `0 4px 6px rgba(0, 0, 0, 0.2)`;
+                link.onmouseover = () => {
+                    link.style.boxShadow = `0 8px 15px ${theme.buttonHoverShadow}`;
+                };
+                link.onmouseout = () => {
+                    link.style.boxShadow = `0 4px 6px rgba(0, 0, 0, 0.2)`;
+                };
+
+                // Asegurar que los colores de fondo base se mantengan (ej. bg-red-600)
+                const baseColorClass = link.getAttribute('data-base-color');
+                if (!link.classList.contains(baseColorClass)) {
+                    link.classList.add(baseColorClass);
+                }
+            });
+
+            // Actualizar el estado del selector
+            const statusText = document.getElementById('current-theme-status');
+            statusText.textContent = `Tema actual: ${themeName === 'dark' ? 'Oscuro' : 'Claro'}`;
+            statusText.classList.remove('text-gray-400', 'text-gray-600');
+            statusText.classList.add(theme.bioText);
+        }
+
+        /**
+         * Carga el tema guardado de Firestore y lo aplica.
+         */
+        function loadDesignSettings() {
+            if (!db) return;
+
+            const designDocRef = doc(db, 'artifacts', appId, DESIGN_DOC_PATH);
+
+            // Escuchar cambios en tiempo real en la configuración de diseño
+            onSnapshot(designDocRef, (docSnap) => {
+                let currentTheme = 'dark'; // Tema por defecto
+
+                if (docSnap.exists() && docSnap.data().theme) {
+                    currentTheme = docSnap.data().theme;
+                }
+
+                applyTheme(currentTheme);
+            }, (error) => {
+                console.error("Error al escuchar la configuración de diseño:", error);
+                applyTheme('dark'); // Aplicar el tema por defecto si falla la carga
+            });
+        }
+
+        /**
+         * Guarda el tema seleccionado por el dueño en Firestore.
+         * @param {string} themeName - 'dark' o 'light'.
+         */
+        async function saveTheme(themeName) {
+            if (!db || !isOwner) {
+                console.warn("Solo el dueño puede cambiar el tema.");
+                return;
+            }
+            const designDocRef = doc(db, 'artifacts', appId, DESIGN_DOC_PATH);
+            try {
+                await setDoc(designDocRef, { theme: themeName, last_updated: serverTimestamp() });
+            } catch (error) {
+                console.error("Error al guardar el tema:", error);
+            }
+        }
+
+        /**
+         * Configura los botones del selector de tema para el dueño.
+         */
+        function setupDesignEditing() {
+            if (!isOwner) return;
+
+            document.getElementById('theme-dark-btn').addEventListener('click', () => {
+                saveTheme('dark');
+            });
+            document.getElementById('theme-light-btn').addEventListener('click', () => {
+                saveTheme('light');
+            });
+        }
+
+
+        // --------------------------------------------------------
+        // 2. TRACKING Y ANALÍTICAS
+        // --------------------------------------------------------
+
+        function getAnalyticsCollectionRef() {
+             return collection(db, 'artifacts', appId, 'public', 'data', ANALYTICS_COLLECTION);
+        }
+
+        async function logEvent(type, data = {}) {
+            if (!db || !userId) {
+                return;
+            }
+            const eventData = {
+                type: type,
+                timestamp: serverTimestamp(),
+                visitor_id: userId,
+                user_agent: navigator.userAgent,
+                referrer: document.referrer || 'direct_visit',
+                ...data
+            };
+            try {
+                await addDoc(getAnalyticsCollectionRef(), eventData);
+            } catch (error) {
+                console.error("Error al registrar el evento:", error);
+            }
+        }
+
+        function logPageView() {
+            logEvent('page_view');
+        }
+
+        function trackClick(linkId, url) {
+            logEvent('link_click', { link_id: linkId, destination_url: url });
+            setTimeout(() => {
+                window.open(url, '_blank');
+            }, 50);
+        }
+
+        function setupAnalyticsDisplay() {
+            if (!db) return;
+
+            // Escuchar todos los eventos de analítica
+            const q = query(getAnalyticsCollectionRef());
+
+            onSnapshot(q, (snapshot) => {
+                let totalViews = 0;
+                let totalClicks = 0;
+
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.type === 'page_view') {
+                        totalViews++;
+                    } else if (data.type === 'link_click') {
+                        totalClicks++;
+                    }
+                });
+
+                // Actualizar la interfaz de usuario
+                document.getElementById('total-views').textContent = totalViews.toString();
+                document.getElementById('total-clicks').textContent = totalClicks.toString();
+
+            }, (error) => {
+                console.error("Error al escuchar los datos de analíticas:", error);
+            });
+        }
+
+        // --------------------------------------------------------
+        // 3. INICIALIZACIÓN DE FIREBASE Y AUTENTICACIÓN
+        // --------------------------------------------------------
+
+        function initFirebase() {
+            if (Object.keys(firebaseConfig).length === 0) {
+                console.error("Firebase no está configurado.");
+                return;
+            }
+
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // Cargar la configuración de diseño antes de la autenticación
+                loadDesignSettings(); 
+
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        const ownerControls = document.getElementById('owner-controls');
+                        
+                        // Determinar si es el dueño (solo si el token inicial está presente)
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            isOwner = true;
+                            ownerControls.classList.remove('hidden'); // Mostrar controles
+                            setupAnalyticsDisplay(); // Empezar a mostrar analíticas
+                            setupDesignEditing(); // Activar edición de diseño
+                        } else {
+                            isOwner = false;
+                            ownerControls.classList.add('hidden'); // Ocultar controles
+                        }
+                        
+                        logPageView();
+                    } else {
+                        // Intento de inicio de sesión: primero con token, luego anónimo
+                        try {
+                            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                                await signInWithCustomToken(auth, __initial_auth_token);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        } catch (error) {
+                            // Si falla, reintenta anónimo
+                            try {
+                                await signInAnonymously(auth);
+                            } catch (e) {
+                                console.error("Error fatal al autenticar:", e);
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error al inicializar Firebase:", error);
+            }
+        }
+
+        // --------------------------------------------------------
+        // 4. SETUP INICIAL
+        // --------------------------------------------------------
+
+        window.onload = function() {
+            initFirebase();
+
+            // Asignar el manejador de clic a todos los enlaces con la clase 'link-to-track'
+            document.querySelectorAll('.link-to-track').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const linkId = link.getAttribute('data-link-id');
+                    const url = link.getAttribute('href');
+
+                    if (linkId && url) {
+                        trackClick(linkId, url);
+                    } else {
+                        window.open(url, link.target);
+                    }
+                });
+            });
+        };
+
+    </script>
+</body>
+</html>
+
